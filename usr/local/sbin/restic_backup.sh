@@ -66,7 +66,6 @@ restic backup \
   --cache-dir /srv/rhdwp/.cache/restic \
   --tag $BACKUP_TAG \
   --option b2.connections=$B2_CONNECTIONS \
-  --cleanup-cache \
   $BACKUP_EXCLUDES \
   $BACKUP_PATHS &
 wait $!
