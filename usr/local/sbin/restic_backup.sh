@@ -23,8 +23,8 @@ RETENTION_YEARS=1
 
 # What to backup, and what to not
 BACKUP_PATHS=
-for d in /srv/rhdwp/www/*; do
-  BACKUP_PATHS+="$d "
+for dir in /srv/rhdwp/www/*; do
+  BACKUP_PATHS+="$dir "
 done
 
 # [ -d /mnt/media ] && BACKUP_PATHS+=" /mnt/media"
@@ -63,6 +63,7 @@ wait $!
 restic backup \
   --verbose \
   --one-file-system \
+  --cache-dir /srv/rhdwp/.cache/restic \
   --tag $BACKUP_TAG \
   --option b2.connections=$B2_CONNECTIONS \
   $BACKUP_EXCLUDES \
