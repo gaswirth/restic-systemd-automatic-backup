@@ -27,7 +27,5 @@ B2_CONNECTIONS=50
 #wait $!
 
 # Check repository for errors.
-restic check \
-	--option b2.connections=$B2_CONNECTIONS \
-	--verbose &
+restic check --option b2.connections=$B2_CONNECTIONS &
 wait $!
