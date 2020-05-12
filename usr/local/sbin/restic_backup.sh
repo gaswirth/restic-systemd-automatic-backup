@@ -15,6 +15,16 @@ exit_hook() {
 }
 trap exit_hook INT TERM
 
+# Set run flag
+BACKUP_TAG=manual
+while getopts "c" opt; do
+  case "$opt" in
+  c) # Flag used in cron.d to set tag
+    BACKUP_TAG=cron.d
+    ;;
+  esac
+done
+
 # How many backups to keep.
 RETENTION_DAYS=7
 RETENTION_WEEKS=8
@@ -34,8 +44,6 @@ for dir in /home/*; do
     BACKUP_EXCLUDES+=" --exclude-file $dir/.backup_exclude"
   fi
 done
-
-BACKUP_TAG=cron.d
 
 # Set all environment variables like
 # B2_ACCOUNT_ID, B2_ACCOUNT_KEY, RESTIC_REPOSITORY etc.
