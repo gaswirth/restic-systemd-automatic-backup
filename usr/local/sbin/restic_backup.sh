@@ -17,10 +17,13 @@ trap exit_hook INT TERM
 
 # Set run flag
 BACKUP_TAG=manual
-while getopts "c" opt; do
+while getopts "c*" opt; do
   case "$opt" in
   c) # Flag used in cron.d to set tag
     BACKUP_TAG=cron.d
+    ;;
+  *) # Invalid flag
+    echo "Invalid flag."
     ;;
   esac
 done
@@ -37,7 +40,18 @@ for dir in /srv/rhdwp/www/*; do
   BACKUP_PATHS+="$dir "
 done
 
-# [ -d /mnt/media ] && BACKUP_PATHS+=" /mnt/media"
+# Backup mount dirs in /mnt
+if [ -d "/mnt" ]; then
+    # Loop through each directory in /mnt
+    for dir in /mnt/*/; do
+        # Check if the path is a directory
+        if [ -d "$dir" ]; then
+            # Append the directory path to BACKUP_PATHS variable
+            BACKUP_PATHS+="$dir"
+        fi
+    done
+fi
+
 BACKUP_EXCLUDES="--exclude-file /etc/restic/backup_exclude"
 for dir in /home/*; do
   if [ -f "$dir/.backup_exclude" ]; then
